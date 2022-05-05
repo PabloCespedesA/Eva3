@@ -1,51 +1,51 @@
 import { Request, Response} from "express"
 import { UserTokenPayload } from "../models/dto/UserDTO"
-import {CreateZodiacDTO, ZodiacDTO, UpdateZodiacDTO} from "../models/dto/ZodiacDTO"
-import ZodiacRepository from "../models/repositories/ZodiacRepository"
-import { createZodiacSchema, updateZodiacSchema } from "../models/validators/zodiacSchemas"
+import {CreateTaskDTO, TaskDTO, UpdateTaskDTO} from "../models/dto/TaskDTO"
+import TaskRepository from "../models/repositories/TaskRepository"
+import { createTaskSchema, updateTaskSchema } from "../models/validators/taskSchemas"
 
-export default class ZodiacController {
+export default class TaskController {
     public readonly getAll = async (req: Request, res: Response) => {
         const user=req.user as UserTokenPayload
-        const repository = new ZodiacRepository(user.sub)
-        const zodiac: ZodiacDTO[] = await repository.findAll()
-      res.json(zodiac)
+        const repository = new TaskRepository(user.sub)
+        const task: TaskDTO[] = await repository.findAll()
+      res.json(task)
     }
 
     public readonly getByid = async (req: Request, res: Response) => {
         const { id } = req.params
         const user=req.user as UserTokenPayload
-        const repository = new ZodiacRepository(user.sub)
-        const zodiac = await repository.findById(parseInt(id))
+        const repository = new TaskRepository(user.sub)
+        const task = await repository.findById(parseInt(id))
 
-        if(!zodiac) {
-            res.status(404).json({ message: 'Caballero no encontrado'})
+        if(!task) {
+            res.status(404).json({ message: 'Task not found'})
             return
         }
 
-        res.json({zodiac})
+        res.json({task})
     }
 
     public readonly create = async (req: Request, res: Response) => {
-        const zodiac = req.body as CreateZodiacDTO
+        const task = req.body as CreateTaskDTO
 
 try{
-    await createZodiacSchema.validateAsync(zodiac)
+    await createTaskSchema.validateAsync(task)
 } catch (error){
 res.status(400).json({message: error.message})
 return
 }
 
 const user=req.user as UserTokenPayload
-const repository = new ZodiacRepository(user.sub)
+const repository = new TaskRepository(user.sub)
 
 try{
-   const newZodiac = await repository.create(zodiac)
+   const newTask = await repository.create(task)
 
-        res.json({newZodiac}) 
+        res.json({newTask}) 
     } catch(error){
       if (error.code === 'P2002'){
-          res.status(409).json({ message: 'zodiac knight already exist'})
+          res.status(409).json({ message: 'Task already exist'})
           return
       }
       console.log(error)
@@ -54,18 +54,18 @@ try{
     }
     public readonly update = async (req: Request, res: Response) => {
         const { id } = req.params
-        const zodiac = req.body as UpdateZodiacDTO
+        const task = req.body as UpdateTaskDTO
         
         try{
-            await updateZodiacSchema.validateAsync(zodiac)
+            await updateTaskSchema.validateAsync(task)
         } catch (error){
         res.status(400).json({message: error.message})
         return
         }
         
         const user=req.user as UserTokenPayload
-        const repository = new ZodiacRepository(user.sub)
-        await repository.update(parseInt(id), zodiac)
+        const repository = new TaskRepository(user.sub)
+        await repository.update(parseInt(id), task)
         res.sendStatus(204)
     }
 
@@ -73,7 +73,7 @@ try{
         const { id } = req.params
 
         const user=req.user as UserTokenPayload 
-        const repository = new ZodiacRepository(user.sub)
+        const repository = new TaskRepository(user.sub)
         await repository.delete(parseInt(id)) 
         res.sendStatus(204)
     }

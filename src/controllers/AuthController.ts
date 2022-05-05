@@ -25,7 +25,7 @@ export default class AuthController {
             return
         }
 
-const token = generateToken(userFromDb)
+    const token = generateToken(userFromDb)
 
             res.json({token})
         }
