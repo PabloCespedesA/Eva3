@@ -1,4 +1,7 @@
 export interface BaseUserDTO {
+    id?: number
+    firstName: string
+    lastName: string
     email: string
 }
 

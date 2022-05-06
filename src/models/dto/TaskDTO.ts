@@ -2,7 +2,8 @@ interface BaseTaskDTO {
     id?: number
     title: string
     content: string
-    birth: Date
+    done: boolean
+    editionDate: Date
 }
 
 export interface TaskDTO extends BaseTaskDTO {

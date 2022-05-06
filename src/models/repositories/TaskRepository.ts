@@ -37,7 +37,7 @@ public readonly create = async (task: CreateTaskDTO): Promise<TaskDTO> => {
         data: {
             ...task,
             userId: this.userId,
-            birth: new Date(task.birth).toISOString()
+            editionDate: new Date(task.editionDate).toISOString()
         }
     })
 
@@ -52,7 +52,7 @@ public readonly update = async (id: number, task: UpdateTaskDTO): Promise<void> 
         },
         data: {
         ...task,
-        birth: task.birth ? new Date(task.birth).toISOString() : undefined
+        editionDate: task.editionDate ? new Date(task.editionDate).toISOString() : undefined
     }
     })
 }

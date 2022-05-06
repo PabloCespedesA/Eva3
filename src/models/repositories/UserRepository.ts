@@ -61,5 +61,5 @@ public readonly delete = async (id: number): Promise<void> => {
             id
       }
     })
-}
+  }
 }
