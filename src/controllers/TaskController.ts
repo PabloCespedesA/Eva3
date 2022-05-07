@@ -19,7 +19,7 @@ export default class TaskController {
         const task = await repository.findById(parseInt(id))
 
         if(!task) {
-            res.status(404).json({ message: 'Task not found'})
+            res.status(404).json({ message: 'Task not found '})
             return
         }
 
